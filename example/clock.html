@@ -1,0 +1,54 @@
+<html>
+<head>
+	<title>Kentarick clock example</title>
+	<script type="text/javascript" src="../mvc.js"></script>
+
+	<script type="text/javascript" src="clock/model/Timer.js"></script>
+	<script type="text/javascript" src="clock/controller/Manager.js"></script>
+	<script type="text/javascript" src="clock/view/clock.js"></script>
+	<script type="text/javascript" src="clock/view/digitalclock.js"></script>
+	<script type="text/javascript" src="clock/view/linkbutton.js"></script>
+
+	<script type="text/javascript">
+
+		onload = function(){
+			// MODEL
+			var timer = new Timer()
+			// CONTROLLER
+			var manager = new Manager()
+
+			// VIEWS
+			var clock = new Clock('canvas')
+			var digital = new DigitalClock('digital')
+
+			var start = new LinkButton('start')
+			var stop = new LinkButton('stop')
+			var reset = new LinkButton('reset')
+
+			//Wiring time!
+			timer.hook(manager, 'update', timer.tick)
+			timer.hook(manager, 'reset', timer.reset)
+
+			clock.hook(timer, 'time', clock.setUpdate)
+			digital.hook(timer, 'time', digital.setUpdate)
+
+			manager.hook(start, 'click', manager.setStart)
+			manager.hook(stop, 'click', manager.setStop)
+			manager.hook(reset, 'click', manager.setReset)
+
+		}
+	</script>
+</head>
+
+<body>
+This example is based on <a href="http://peter.michaux.ca/examples/clocks/mvc-clock">peter michaux's clock example</a>
+you can found on his <a href="http://peter.michaux.ca/articles/mvc-architecture-for-javascript-applications">mvc architecture for javascript applications</a> article.
+
+<hr />
+<canvas id="canvas"></canvas>
+<div id="digital">00:00:00</div>
+<a id="start">Start</a>
+<a id="stop">Stop</a>
+<a id="reset">Reset</a>
+</body>
+</html>
